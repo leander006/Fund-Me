@@ -6,17 +6,31 @@ require("dotenv").config();
 require("@nomiclabs/hardhat-etherscan");
 require("hardhat-gas-reporter");
 require("solidity-coverage");
-require('hardhat-deploy')
+require("hardhat-deploy");
 /** @type import('hardhat/config').HardhatUserConfig */
 
 module.exports = {
   defaultNetwork: "hardhat",
-  solidity: "0.8.9",
+  solidity: {
+    compilers: [
+      {
+        version: "0.8.8",
+      },
+      {
+        version: "0.6.6",
+      },
+    ],
+  },
   networks: {
+    hardhat: {
+      chainId: 31337,
+      // gasPrice: 130000000000,
+    },
     goerli: {
       url: process.env.GOERLI_RPC_URL || "http:georli.example",
-      account: [process.env.PRIVATE_KEY] || "x0key",
+      accounts: [process.env.PRIVATE_KEY],
       chainId: 5,
+      blockConfirmations: 6,
     },
   },
   etherscan: {
@@ -28,5 +42,13 @@ module.exports = {
     noColors: true,
     currency: "USD",
     coinmarketcap: process.env.COINMARKETCAP_API_KEY || "key",
+  },
+  namedAccounts: {
+    deployer: {
+      default: 0,
+    },
+    users: {
+      default: 1,
+    },
   },
 };
